@@ -1,14 +1,12 @@
 const path = require('path');
 const glob = require('glob-all');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
-const UglifyJsPlugin = require('uglifyjs-webpack-plugin');
-const OptimizeCssAssetsPlugin = require('optimize-css-assets-webpack-plugin');
 const BrowserSyncPlugin = require('browser-sync-webpack-plugin');
+const TerserPlugin = require('terser-webpack-plugin');
 const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 const FixStyleOnlyEntriesPlugin = require("webpack-fix-style-only-entries");
 const PurgecssPlugin = require('purgecss-webpack-plugin');
 const purgecssWordpress = require('purgecss-with-wordpress');
-const autoprefixer = require('autoprefixer');
 
 module.exports = (env, argv) => {
   const isProdMode = argv.mode === 'production';
@@ -34,7 +32,7 @@ module.exports = (env, argv) => {
       sourceMapFilename: '[name].map'
     },
     mode: isProdMode ? 'production' : 'development',
-    devtool: 'cheap-source-map',
+    devtool: 'source-map',
     module: {
       rules: [
         {
@@ -45,14 +43,31 @@ module.exports = (env, argv) => {
           test: /\.s?css$/,
           use: [
             MiniCssExtractPlugin.loader,
-            'css-loader',
+            {
+              loader: 'css-loader',
+              options: { sourceMap: true }
+            },
             {
               loader: 'postcss-loader',
               options: {
-                plugins: () => [autoprefixer()]
+                plugins: () => [
+                  // Prefixes CSS
+                  require('autoprefixer')([
+                    "> 1%",
+                    "last 2 versions"
+                  ]),
+                  // Minifies CSS
+                  require('cssnano')({
+                    preset: 'default',
+                  })
+                ],
+                sourceMap: true
               }
             },
-            'sass-loader'
+            {
+              loader: 'sass-loader',
+              options: { sourceMap: true }
+            }
           ]
         }
       ]
@@ -63,13 +78,13 @@ module.exports = (env, argv) => {
       new MiniCssExtractPlugin({
         filename: '[name].[contenthash].css'
       }),
-      new PurgecssPlugin({
-        paths: glob.sync([PATHS.php, PATHS.js], { nodir: true }),
-        safelist: [
-          ...purgecssWordpress.safelist,
-          ...extraWordpressClasses
-        ]
-      }),
+      // new PurgecssPlugin({
+      //   paths: glob.sync([PATHS.php, PATHS.js], { nodir: true }),
+      //   safelist: [
+      //     ...purgecssWordpress.safelist,
+      //     ...extraWordpressClasses
+      //   ]
+      // }),
       new BrowserSyncPlugin({
         files: '**/*.php',
         proxy: 'http://cumberland.test'
@@ -77,8 +92,9 @@ module.exports = (env, argv) => {
     ],
     optimization: {
       minimizer: [
-        new UglifyJsPlugin(),
-        new OptimizeCssAssetsPlugin({ cssProcessorOptions: { map: { inline: false, annotation: true } } })
+        new TerserPlugin({
+          extractComments: false
+        })
       ]
     }
   };
