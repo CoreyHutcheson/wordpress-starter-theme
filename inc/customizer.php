@@ -56,6 +56,11 @@ function fourtyau_starter_theme_customize_partial_blogdescription() {
  * Binds JS handlers to make Theme Customizer preview reload changes asynchronously.
  */
 function fourtyau_starter_theme_customize_preview_js() {
-	wp_enqueue_script( 'fourtyau-starter-theme-customizer', get_template_directory_uri() . '/js/customizer.js', array( 'customize-preview' ), _S_VERSION, true );
+	$paths = [
+		'public' => get_template_directory_uri() . '/public/',
+		'customizer' => glob(get_template_directory() . '/public/customizer-bundle.*.js')[0],
+	];
+
+	wp_enqueue_script( 'fourtyau-starter-theme-customizer', $paths['public'] . basename($paths['customizer']), array( 'customize-preview' ), false, true );
 }
 add_action( 'customize_preview_init', 'fourtyau_starter_theme_customize_preview_js' );
