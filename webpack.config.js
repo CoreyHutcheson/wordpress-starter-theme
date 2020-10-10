@@ -81,7 +81,7 @@ module.exports = (env, argv) => {
       }),
       new BrowserSyncPlugin({
         files: '**/*.php',
-        proxy: 'http://cumberland.test'
+        proxy: 'http://localhost:8080'
       })
     ],
     optimization: {
