@@ -1,22 +1,36 @@
 const path = require('path');
-const glob = require('glob-all');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const BrowserSyncPlugin = require('browser-sync-webpack-plugin');
 const TerserPlugin = require('terser-webpack-plugin');
 const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 const FixStyleOnlyEntriesPlugin = require("webpack-fix-style-only-entries");
-const PurgecssPlugin = require('purgecss-webpack-plugin');
 const purgecssWordpress = require('purgecss-with-wordpress');
 
 module.exports = (env, argv) => {
   const isProdMode = argv.mode === 'production';
   const PATHS = {
     php: path.join(__dirname, '**/*.php'),
-    css: path.join(__dirname, 'src/sass/**/*'),
     js: path.join(__dirname, 'src/js/**/*')
   };
-  const extraWordpressClasses = [
+  const purgeSafelist = [
+    ...purgecssWordpress.safelist,
     'sub-menu'
+  ];
+  const postCssPlugins = [
+    // Prefixes CSS
+    require('autoprefixer')([
+      "> 1%",
+      "last 2 versions"
+    ]),
+    // Minifies CSS
+    require('cssnano')({
+      preset: 'default',
+    }),
+    // Purge unused CSS
+    require('@fullhuman/postcss-purgecss')({
+      content: [PATHS.php, PATHS.js],
+      safelist: purgeSafelist
+    })
   ];
 
   return {
@@ -49,20 +63,7 @@ module.exports = (env, argv) => {
             },
             {
               loader: 'postcss-loader',
-              options: {
-                plugins: () => [
-                  // Prefixes CSS
-                  require('autoprefixer')([
-                    "> 1%",
-                    "last 2 versions"
-                  ]),
-                  // Minifies CSS
-                  require('cssnano')({
-                    preset: 'default',
-                  })
-                ],
-                sourceMap: true
-              }
+              options: { plugins: () => postCssPlugins, sourceMap: true }
             },
             {
               loader: 'sass-loader',
@@ -78,13 +79,6 @@ module.exports = (env, argv) => {
       new MiniCssExtractPlugin({
         filename: '[name].[contenthash].css'
       }),
-      // new PurgecssPlugin({
-      //   paths: glob.sync([PATHS.php, PATHS.js], { nodir: true }),
-      //   safelist: [
-      //     ...purgecssWordpress.safelist,
-      //     ...extraWordpressClasses
-      //   ]
-      // }),
       new BrowserSyncPlugin({
         files: '**/*.php',
         proxy: 'http://cumberland.test'
