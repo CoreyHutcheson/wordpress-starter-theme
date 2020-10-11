@@ -28,18 +28,18 @@ if ( post_password_required() ) {
 		?>
 		<h2 class="comments-title">
 			<?php
-			$fourtyau_starter_theme_comment_count = get_comments_number();
-			if ( '1' === $fourtyau_starter_theme_comment_count ) {
+			$fortyau_starter_theme_comment_count = get_comments_number();
+			if ( '1' === $fortyau_starter_theme_comment_count ) {
 				printf(
 					/* translators: 1: title. */
-					esc_html__( 'One thought on &ldquo;%1$s&rdquo;', 'fourtyau-starter-theme' ),
+					esc_html__( 'One thought on &ldquo;%1$s&rdquo;', 'fortyau-starter-theme' ),
 					'<span>' . wp_kses_post( get_the_title() ) . '</span>'
 				);
 			} else {
 				printf( 
 					/* translators: 1: comment count number, 2: title. */
-					esc_html( _nx( '%1$s thought on &ldquo;%2$s&rdquo;', '%1$s thoughts on &ldquo;%2$s&rdquo;', $fourtyau_starter_theme_comment_count, 'comments title', 'fourtyau-starter-theme' ) ),
-					number_format_i18n( $fourtyau_starter_theme_comment_count ), // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+					esc_html( _nx( '%1$s thought on &ldquo;%2$s&rdquo;', '%1$s thoughts on &ldquo;%2$s&rdquo;', $fortyau_starter_theme_comment_count, 'comments title', 'fortyau-starter-theme' ) ),
+					number_format_i18n( $fortyau_starter_theme_comment_count ), // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 					'<span>' . wp_kses_post( get_the_title() ) . '</span>'
 				);
 			}
@@ -65,7 +65,7 @@ if ( post_password_required() ) {
 		// If comments are closed and there are comments, let's leave a little note, shall we?
 		if ( ! comments_open() ) :
 			?>
-			<p class="no-comments"><?php esc_html_e( 'Comments are closed.', 'fourtyau-starter-theme' ); ?></p>
+			<p class="no-comments"><?php esc_html_e( 'Comments are closed.', 'fortyau-starter-theme' ); ?></p>
 			<?php
 		endif;
 

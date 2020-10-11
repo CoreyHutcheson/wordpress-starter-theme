@@ -14,7 +14,7 @@
 		<?php the_title( '<h1 class="entry-title">', '</h1>' ); ?>
 	</header><!-- .entry-header -->
 
-	<?php fourtyau_starter_theme_post_thumbnail(); ?>
+	<?php fortyau_starter_theme_post_thumbnail(); ?>
 
 	<div class="entry-content">
 		<?php
@@ -22,7 +22,7 @@
 
 		wp_link_pages(
 			array(
-				'before' => '<div class="page-links">' . esc_html__( 'Pages:', 'fourtyau-starter-theme' ),
+				'before' => '<div class="page-links">' . esc_html__( 'Pages:', 'fortyau-starter-theme' ),
 				'after'  => '</div>',
 			)
 		);
@@ -36,7 +36,7 @@
 				sprintf(
 					wp_kses(
 						/* translators: %s: Name of current post. Only visible to screen readers */
-						__( 'Edit <span class="screen-reader-text">%s</span>', 'fourtyau-starter-theme' ),
+						__( 'Edit <span class="screen-reader-text">%s</span>', 'fortyau-starter-theme' ),
 						array(
 							'span' => array(
 								'class' => array(),

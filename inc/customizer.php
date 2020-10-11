@@ -10,7 +10,7 @@
  *
  * @param WP_Customize_Manager $wp_customize Theme Customizer object.
  */
-function fourtyau_starter_theme_customize_register( $wp_customize ) {
+function fortyau_starter_theme_customize_register( $wp_customize ) {
 	$wp_customize->get_setting( 'blogname' )->transport         = 'postMessage';
 	$wp_customize->get_setting( 'blogdescription' )->transport  = 'postMessage';
 	$wp_customize->get_setting( 'header_textcolor' )->transport = 'postMessage';
@@ -20,26 +20,26 @@ function fourtyau_starter_theme_customize_register( $wp_customize ) {
 			'blogname',
 			array(
 				'selector'        => '.site-title a',
-				'render_callback' => 'fourtyau_starter_theme_customize_partial_blogname',
+				'render_callback' => 'fortyau_starter_theme_customize_partial_blogname',
 			)
 		);
 		$wp_customize->selective_refresh->add_partial(
 			'blogdescription',
 			array(
 				'selector'        => '.site-description',
-				'render_callback' => 'fourtyau_starter_theme_customize_partial_blogdescription',
+				'render_callback' => 'fortyau_starter_theme_customize_partial_blogdescription',
 			)
 		);
 	}
 }
-add_action( 'customize_register', 'fourtyau_starter_theme_customize_register' );
+add_action( 'customize_register', 'fortyau_starter_theme_customize_register' );
 
 /**
  * Render the site title for the selective refresh partial.
  *
  * @return void
  */
-function fourtyau_starter_theme_customize_partial_blogname() {
+function fortyau_starter_theme_customize_partial_blogname() {
 	bloginfo( 'name' );
 }
 
@@ -48,19 +48,19 @@ function fourtyau_starter_theme_customize_partial_blogname() {
  *
  * @return void
  */
-function fourtyau_starter_theme_customize_partial_blogdescription() {
+function fortyau_starter_theme_customize_partial_blogdescription() {
 	bloginfo( 'description' );
 }
 
 /**
  * Binds JS handlers to make Theme Customizer preview reload changes asynchronously.
  */
-function fourtyau_starter_theme_customize_preview_js() {
+function fortyau_starter_theme_customize_preview_js() {
 	$paths = [
 		'public' => get_template_directory_uri() . '/public/',
 		'customizer' => glob(get_template_directory() . '/public/customizer-bundle.*.js')[0],
 	];
 
-	wp_enqueue_script( 'fourtyau-starter-theme-customizer', $paths['public'] . basename($paths['customizer']), array( 'customize-preview' ), false, true );
+	wp_enqueue_script( 'fortyau-starter-theme-customizer', $paths['public'] . basename($paths['customizer']), array( 'customize-preview' ), false, true );
 }
-add_action( 'customize_preview_init', 'fourtyau_starter_theme_customize_preview_js' );
+add_action( 'customize_preview_init', 'fortyau_starter_theme_customize_preview_js' );

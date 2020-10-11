@@ -6,15 +6,15 @@
  * runs before the init hook. The init hook is too late for some features, such
  * as indicating support for post thumbnails.
  */
-if ( ! function_exists( 'fourtyau_starter_theme_setup' ) ) :
-	function fourtyau_starter_theme_setup() {
+if ( ! function_exists( 'fortyau_starter_theme_setup' ) ) :
+	function fortyau_starter_theme_setup() {
 		/*
 		 * Make theme available for translation.
 		 * Translations can be filed in the /languages/ directory.
 		 * If you're building a theme based on FortyAU Starter Theme, use a find and replace
-		 * to change 'fourtyau-starter-theme' to the name of your theme in all the template files.
+		 * to change 'fortyau-starter-theme' to the name of your theme in all the template files.
 		 */
-		load_theme_textdomain( 'fourtyau-starter-theme', get_template_directory() . '/languages' );
+		load_theme_textdomain( 'fortyau-starter-theme', get_template_directory() . '/languages' );
 
 		// Add default posts and comments RSS feed links to head.
 		add_theme_support( 'automatic-feed-links' );
@@ -55,7 +55,7 @@ if ( ! function_exists( 'fourtyau_starter_theme_setup' ) ) :
 		add_theme_support(
 			'custom-background',
 			apply_filters(
-				'fourtyau_starter_theme_custom_background_args',
+				'fortyau_starter_theme_custom_background_args',
 				array(
 					'default-color' => 'ffffff',
 					'default-image' => '',
@@ -82,7 +82,7 @@ if ( ! function_exists( 'fourtyau_starter_theme_setup' ) ) :
 		);
 	}
 endif;
-add_action( 'after_setup_theme', 'fourtyau_starter_theme_setup' );
+add_action( 'after_setup_theme', 'fortyau_starter_theme_setup' );
 
 /**
  * Set the content width in pixels, based on the theme's design and stylesheet.
@@ -91,7 +91,7 @@ add_action( 'after_setup_theme', 'fourtyau_starter_theme_setup' );
  *
  * @global int $content_width
  */
-function fourtyau_starter_theme_content_width() {
-	$GLOBALS['content_width'] = apply_filters( 'fourtyau_starter_theme_content_width', 640 );
+function fortyau_starter_theme_content_width() {
+	$GLOBALS['content_width'] = apply_filters( 'fortyau_starter_theme_content_width', 640 );
 }
-add_action( 'after_setup_theme', 'fourtyau_starter_theme_content_width', 0 );
+add_action( 'after_setup_theme', 'fortyau_starter_theme_content_width', 0 );

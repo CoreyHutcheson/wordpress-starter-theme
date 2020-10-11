@@ -11,7 +11,7 @@
  * @param array $classes Classes for the body element.
  * @return array
  */
-function fourtyau_starter_theme_body_classes( $classes ) {
+function fortyau_starter_theme_body_classes( $classes ) {
 	global $post;
 
 	// Adds a class of hfeed to non-singular pages.
@@ -31,14 +31,14 @@ function fourtyau_starter_theme_body_classes( $classes ) {
 
 	return $classes;
 }
-add_filter( 'body_class', 'fourtyau_starter_theme_body_classes' );
+add_filter( 'body_class', 'fortyau_starter_theme_body_classes' );
 
 /**
  * Add a pingback url auto-discovery header for single posts, pages, or attachments.
  */
-function fourtyau_starter_theme_pingback_header() {
+function fortyau_starter_theme_pingback_header() {
 	if ( is_singular() && pings_open() ) {
 		printf( '<link rel="pingback" href="%s">', esc_url( get_bloginfo( 'pingback_url' ) ) );
 	}
 }
-add_action( 'wp_head', 'fourtyau_starter_theme_pingback_header' );
+add_action( 'wp_head', 'fortyau_starter_theme_pingback_header' );

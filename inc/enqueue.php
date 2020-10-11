@@ -2,7 +2,7 @@
 /**
  * Enqueue scripts and styles.
  */
-function fourtyau_starter_theme_scripts() {
+function fortyau_starter_theme_scripts() {
 	$paths = [
 		'public' => get_template_directory_uri() . '/public/',
 		'js' => glob(get_template_directory() . '/public/index-bundle.*.js')[0],
@@ -18,4 +18,4 @@ function fourtyau_starter_theme_scripts() {
 		wp_enqueue_script( 'comment-reply' );
 	}
 }
-add_action( 'wp_enqueue_scripts', 'fourtyau_starter_theme_scripts' );
+add_action( 'wp_enqueue_scripts', 'fortyau_starter_theme_scripts' );
