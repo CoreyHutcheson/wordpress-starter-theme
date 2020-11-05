@@ -90,6 +90,9 @@ module.exports = (env, argv) => {
           extractComments: false
         })
       ]
+    },
+    externals: {
+      jquery: 'jQuery'
     }
   };
 };
