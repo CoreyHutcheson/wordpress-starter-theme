@@ -4,18 +4,10 @@ const BrowserSyncPlugin = require('browser-sync-webpack-plugin');
 const TerserPlugin = require('terser-webpack-plugin');
 const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 const FixStyleOnlyEntriesPlugin = require("webpack-fix-style-only-entries");
-const purgecssWordpress = require('purgecss-with-wordpress');
 
 module.exports = (env, argv) => {
   const isProdMode = argv.mode === 'production';
-  const PATHS = {
-    php: path.join(__dirname, '**/*.php'),
-    js: path.join(__dirname, 'src/js/**/*')
-  };
-  const purgeSafelist = [
-    ...purgecssWordpress.safelist,
-    'sub-menu'
-  ];
+  const stylesheetName = isProdMode ? '[name].[contenthash].css' : 'style.css';
   const postCssPlugins = [
     // Prefixes CSS
     require('autoprefixer')([
@@ -25,11 +17,6 @@ module.exports = (env, argv) => {
     // Minifies CSS
     require('cssnano')({
       preset: 'default',
-    }),
-    // Purge unused CSS
-    require('@fullhuman/postcss-purgecss')({
-      content: [PATHS.php, PATHS.js],
-      safelist: purgeSafelist
     })
   ];
 
@@ -49,10 +36,12 @@ module.exports = (env, argv) => {
     devtool: 'source-map',
     module: {
       rules: [
+        // Javascript -> Babel Loader
         {
           test: /\.jsx?$/,
           loader: 'babel-loader'
         },
+        // SCSS (scss -> resolve-url -> postcss -> css -> extract)
         {
           test: /\.s?css$/,
           use: [
@@ -66,22 +55,51 @@ module.exports = (env, argv) => {
               options: { plugins: () => postCssPlugins, sourceMap: true }
             },
             {
+              loader: 'resolve-url-loader'
+            },
+            {
               loader: 'sass-loader',
               options: { sourceMap: true }
             }
           ]
-        }
+        },
+        // Images (Under 10k bytes, data is output. Otherwise image is output to 'public/media')
+        {
+          test: /\.(png|svg|jpe?g|gif)$/,
+          use: [
+            {
+              loader: 'url-loader',
+              options: {
+                limit: 10000,
+                outputPath: 'media',
+                name: '[name].[ext]'
+              }
+            },
+          ],
+        },
+        // Fonts (Output to 'public/fonts')
+        {
+          test: /\.(ttf|woff2?|eot)$/,
+          use: {
+            loader: 'file-loader',
+            options: {
+              outputPath: 'fonts',
+              name: '[name].[ext]'
+            }
+          },
+        },
       ]
     },
     plugins: [
       new CleanWebpackPlugin(),
       new FixStyleOnlyEntriesPlugin(),
       new MiniCssExtractPlugin({
-        filename: '[name].[contenthash].css'
+        filename: stylesheetName
       }),
       new BrowserSyncPlugin({
-        files: '**/*.php',
-        proxy: 'http://localhost:8080'
+        proxy: 'http://localhost:8080',
+        files: ['**/*.php'],
+        injectCss: true
       })
     ],
     optimization: {
